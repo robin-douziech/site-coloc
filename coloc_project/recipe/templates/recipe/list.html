@@ -1,0 +1,52 @@
+{% extends 'recipe/base.html' %}
+
+{% load static custom_filters %}
+
+{% block recipe_extra_headers %}
+	<link rel="stylesheet" type="text/css" href="{% static 'recipe/style/list.css' %}">
+{% endblock recipe_extra_headers %}
+
+{% block foreground %}
+	<div class="layer1">
+		<form action="" method="get">
+			{% csrf_token %}
+			{{ form.as_p }}
+		</form>
+	</div>
+	<div class="layer2">
+		<div class="recipes">
+			<div class="recipes__heading"><!--h1>Résultats :</h1--></div>
+			<div class="recipes__content">
+				{% for recipe in results %}
+					<a class="recipe" href="{% url 'recipe:details' %}?id={{recipe.id}}">
+						<div class="recipe__fig">
+							<img src="{{recipe.image.url}}">
+						</div>
+						<div class="recipe__text">
+							<div class="title">
+								<p>{{ recipe.title }}</p>
+							</div>
+							<div class="text">
+								<div class="infos">
+									<div>
+										<p>préparation: {{ recipe.prep_duration|hhmmss_to_mins }}</p>
+										<p>cuisson: {{ recipe.cook_duration|hhmmss_to_mins }}</p>
+									</div>
+									<div>
+										<p>difficulté: {{ recipe.difficulty }}/10</p>
+										<p>note: {{ recipe.grade }}/10</p>
+									</div>
+								</div>
+								<div class="tags">
+									{% for tag in recipe.tags.all %}
+										<div class="tag"><p>{{ tag.text }}</p></div>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock foreground %}

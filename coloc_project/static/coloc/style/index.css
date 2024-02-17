@@ -1,0 +1,31 @@
+.foreground {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.apps {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+
+	width: 80%;
+	margin-top: 30px;
+}
+
+.app {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	width: 200px;
+	height: 100px;
+	margin: 30px;
+
+	border-radius: 10px;
+	box-shadow: 0 0 8px #9b9b9b;
+}

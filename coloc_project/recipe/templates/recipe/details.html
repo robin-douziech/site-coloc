@@ -1,0 +1,130 @@
+{% extends 'recipe/base.html' %}
+
+{% load static custom_filters %}
+
+{% block recipe_extra_headers %}
+	<link rel="stylesheet" type="text/css" href="{% static 'recipe/style/details.css' %}">
+	{% block recipe_details_extra_headers %}{% endblock recipe_details_extra_headers %}
+{% endblock recipe_extra_headers %}
+
+{% block header-title %}
+	<h1>{{ recipe.title }}</h1>
+{% endblock header-title %}
+
+{% block foreground %}
+	<div class="layer layer1">
+		<div class="figure">
+			<div class="imgwrapper">
+				<img src="{{recipe.image.url}}">
+			</div>
+		</div>
+		<div class="text">
+			<div class="text__heading"></div>
+			<div class="text__content">
+				{% block text__content %}
+				<div class="infos">
+					<div>
+						<div>
+							<p>Préparation : {{ recipe.prep_duration|hhmmss_to_mins }}</p>
+							<p>Cuisson : {{ recipe.cook_duration|hhmmss_to_mins }}</p>						
+						</div>
+						<div>
+							<p>Difficulté : {{ recipe.difficulty }}/10</p>
+							<p>Note : {{ recipe.grade }}/10</p>							
+						</div>
+					</div>
+					<div>
+						<p>Pour {{ recipe.nb_pers }} personne{% if recipe.nb_pers > 1 %}s{% endif %}</p>	
+					</div>
+				</div>
+				<div class="tags">
+					<div class="tags__heading"><p>Tags :</p></div>
+					<div class="tags__content">
+						{% for tag in recipe.tags.all %}
+							<div class="tag"><p>{{ tag.text }}</p></div>
+						{% endfor %}
+					</div>
+				</div>
+				{% endblock text__content %}
+			</div>
+		</div>
+	</div>
+	<div class="layer layer2">
+		<div class="ingredients">
+			<div class="ingredients__heading"><h1>Ingrédients</h1></div>
+			<div class="ingredients__content">
+				{% block ingredients__content %}
+				{% for relationship in recipe.ingredient_relationships.all %}
+					<div class="ingredient">
+						<div class="ingredient__fig">
+							<img src="{{relationship.ingredient.image.url}}">
+						</div>
+						<div class="ingredient__text">
+							<p>{{ relationship.ingredient.name }}</p>
+							<p>({{ relationship.quantity }})</p>
+						</div>
+					</div>
+				{% endfor %}
+				{% endblock ingredients__content %}
+			</div>
+		</div>
+		<div class="utensils">
+			<div class="utensils__heading"><h1>Ustensiles</h1></div>
+			<div class="utensils__content">
+				{% block utensils__content %}
+				{% for utensil in recipe.utensils.all %}
+					<div class="utensil">
+						<div class="utensil__fig">
+							<img src="{{utensil.image.url}}">
+						</div>
+						<div class="utensil__text">
+							<p>{{ utensil.name }}</p>
+						</div>
+					</div>
+				{% endfor %}
+				{% endblock utensils__content %}
+			</div>
+		</div>
+	</div>
+	<div class="layer layer3">
+		{% block layer3 %}
+		{% if recipe.steps.count > 0 %}
+			<div class="steps">
+				<div class="steps__heading"><h1>Étapes :</h1></div>
+				<div class="steps__content">
+					{% for step in recipe.steps.all %}
+						<div class="step">
+							<div class="step__num"><p>{{ forloop.counter }}</p></div>
+							<div class="step__text"><p>{{ step.text }}</p></div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		{% endif %}
+		{% endblock layer3 %}
+	</div>
+	<div class="layer layer4">
+		{% block layer4 %}
+		{% if recipe.comments.count > 0 %}
+			<div class="comments">
+				<div class="comments__heading"><h1>Remarques :</h1></div>
+				<div class="comments__content">
+					{% for comment in recipe.comments.all %}
+						<div class="comment">
+							<p>{{ comment.text }}</p>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		{% endif %}
+		{% endblock layer4 %}
+	</div>
+	<div class="layer layer5">
+		{% block layer5 %}
+		<div>
+			<a class="btn btn--red delete-btn" href="{% url 'recipe:delete-recipe' %}?id={{recipe.id}}"><p>Supprimer</p></a>
+			<a class="btn btn--blue edit-btn" href="{% url 'recipe:edit' %}?id={{recipe.id}}"><p>Modifier</p></a>
+		</div>
+		{% endblock layer5 %}
+	</div>
+{% endblock foreground %}

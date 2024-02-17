@@ -1,0 +1,114 @@
+.text__content, .text__content input, .text__content select {
+	font-size: 25px;
+}
+
+.text__content .field-container {
+	margin: 10px 0;
+}
+
+.text__content input, .text__content select {
+	margin: 0 10px;
+}
+
+.add-ingredient, .add-utensil {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-size: 20px;
+}
+
+.add-ingredient .form-container, .add-utensil .form-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.add-ingredient .field-container, .add-utensil .field-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin: 5px 0;
+}
+
+.add-ingredient input[type="submit"], .add-utensil input[type="submit"] {
+	margin: 5px 0;
+}
+
+.add-ingredient input, .add-ingredient select, .add-utensil input, .add-utensil select {
+	font-size: 20px;
+	margin: 0 10px;
+	max-width: 50%;
+}
+
+.step form {
+	width: 100%;
+}
+
+.step .form-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+.step .field-container {
+	width: 70%;
+}
+
+.step .field-container textarea {
+	width: 100%;
+	margin: 10px;
+	font-size: 15px;
+}
+
+.step .form-btns {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 30%;
+}
+
+.step .form-btns input, .step .form-btns a {
+	font-size: 25px;
+}
+
+
+
+.comment form {
+	width: 100%;
+}
+
+.comment .form-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+.comment .field-container {
+	width: 70%;
+}
+
+.comment .field-container textarea {
+	width: 100%;
+	margin: 10px;
+	font-size: 15px;
+}
+
+.comment .form-btns {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 30%;
+}
+
+.comment .form-btns input, .comment .form-btns a {
+	font-size: 25px;
+}

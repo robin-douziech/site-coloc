@@ -1,0 +1,12 @@
+.env
+db.sqlite3
+
+venv/
+logs/
+uploads/
+staticfiles/
+__pycache__/
+
+*/*/migrations/*.py
+!*/*/migrations/__init__.py
+!*/*/migrations/*_auto_*.py

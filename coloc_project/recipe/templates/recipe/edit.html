@@ -1,0 +1,100 @@
+{% extends 'recipe/details.html' %}
+
+{% load static custom_filters %}
+
+{% block recipe_details_extra_headers %}
+	<link rel="stylesheet" type="text/css" href="{% static 'recipe/style/edit.css' %}">
+{% endblock recipe_details_extra_headers %}
+
+{% block text__content %}
+<form action="" method="post">{% csrf_token %}{{prep_duration_form.as_p}}</form>
+<form action="" method="post">{% csrf_token %}{{cook_duration_form.as_p}}</form>
+<form action="" method="post">{% csrf_token %}{{ nb_pers_form.as_p }}</form>
+<form action="" method="post">{% csrf_token %}{{difficulty_form.as_p}}</form>
+<form action="" method="post">{% csrf_token %}{{grade_form.as_p}}</form>
+
+<div class="tags">
+	<div class="tags__heading">
+		<form action="" method="post">{% csrf_token %}{{tag_form.as_p}}</form>
+	</div>
+	<div class="tags__content">
+		{% for tag in recipe.tags.all %}
+			<div class="tag"><p>{{ tag.text }}</p></div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock text__content %}
+
+{% block ingredients__content %}
+{% for relationship in recipe.ingredient_relationships.all %}
+	<div class="ingredient">
+		<div class="ingredient__fig">
+			<img src="{{relationship.ingredient.image.url}}">
+		</div>
+		<div class="ingredient__text">
+			<p>{{ relationship.ingredient.name }}</p>
+			<p>({{ relationship.quantity }})</p>
+			<a class="btn btn--red" href="{% url 'recipe:delete-ingredient-recipe-relationship' %}?id={{relationship.id}}"><p>Supprimer</p></a>
+		</div>
+	</div>
+{% endfor %}
+<div class="ingredient add-ingredient">
+	<form action="" method="post">{% csrf_token %}{{ ingredient_form.as_p }}</form>
+</div>
+{% endblock ingredients__content %}
+
+{% block utensils__content %}
+{% for utensil in recipe.utensils.all %}
+	<div class="utensil">
+		<div class="utensil__fig">
+			<img src="{{utensil.image.url}}">
+		</div>
+		<div class="utensil__text">
+			<p>{{ utensil.name }}</p>
+			<a class="btn btn--red" href="{% url 'recipe:delete-utensil-recipe-relationship' %}?utensil_id={{utensil.id}}&recipe_id={{recipe.id}}"><p>Supprimer</p></a>
+		</div>
+	</div>
+{% endfor %}
+<div class="utensil add-utensil">
+	<form action="" method="post">
+		{% csrf_token %}
+		{{ utensil_form.as_p }}
+	</form>
+</div>
+{% endblock utensils__content %}
+
+{% block layer3 %}
+	<div class="steps">
+		<div class="steps__heading"><h1>Étapes :</h1></div>
+		<div class="steps__content">
+			{% for form in step_forms %}
+				<div class="step">
+					<div class="step__num">{{ forloop.counter }}</div>
+					<div class="step__text"><form action="" method="post">{% csrf_token %}{{form.as_p}}</form></div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock layer3 %}
+
+{% block layer4 %}
+	<div class="comments">
+		<div class="comments__heading"><h1>Remarques :</h1></div>
+		<div class="comments__content">
+			{% for form in comments_forms %}
+				<div class="comment">
+					<form action="" method="post">
+						{% csrf_token %}
+						{{ form.as_p }}						
+					</form>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock layer4 %}
+
+{% block layer5 %}
+	<div>
+		<a class="btn btn--blue" href="{% url 'recipe:details' %}?id={{recipe.id}}"><p>Retour</p></a>
+	</div>
+{% endblock layer5 %}

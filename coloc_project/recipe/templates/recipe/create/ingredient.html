@@ -1,0 +1,40 @@
+{% extends 'recipe/base.html' %}
+
+{% load static %}
+
+{% block recipe_extra_headers %}
+	<link rel="stylesheet" type="text/css" href="{% static 'style/form.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'recipe/style/create/ingredient.css' %}">
+{% endblock recipe_extra_headers %}
+
+{% block header-title %}
+	<h1>Nouvel ingrédient</h1>
+{% endblock header-title %}
+
+{% block foreground %}
+	<div class="layer1">
+		<form action="" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<input type="submit" value="Valider">
+		</form>
+	</div>
+	<div class="layer2">
+		<div class="ingredients">
+			<div class="ingredients__heading"><h1>Ingrédients enregistrés :</h1></div>
+			<div class="ingredients__content">
+				{% for ingredient in ingredients %}
+					<div class="ingredient">
+						<div class="ingredient__fig">
+							<img src="{{ingredient.image.url}}">
+						</div>
+						<div class="ingredient__text">
+							<p>{{ ingredient.name }}</p>
+							<a class="btn btn--red" href="{% url 'recipe:delete-ingredient' %}?id={{ingredient.id}}">Supprimer</a>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock foreground %}

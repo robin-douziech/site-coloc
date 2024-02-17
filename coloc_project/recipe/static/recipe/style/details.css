@@ -1,0 +1,300 @@
+.layer {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	margin-top: 30px;
+	width: 100%;
+}
+
+.layer > div {
+	flex: 1;
+}
+
+/* ========= LAYER 1 ========= */
+
+.layer1 {
+	align-items: center;
+}
+
+.figure {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 20px 0;
+}
+
+.imgwrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	max-height: 80%;
+	max-width: 80%;
+	aspect-ratio: auto;
+	border-radius: 30px;
+	overflow: hidden;
+	box-shadow: 0 0 8px #9b9b9b;
+}
+
+.imgwrapper > img {
+	width: 100%;
+	height: 100%;
+	aspect-ratio: auto;
+}
+
+.text {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.text p {
+	font-size: 25px;
+}
+
+.text__content {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.infos {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid black;
+	border-radius: 10px;
+	padding: 10px 20px;
+}
+
+.infos > div {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.infos > div > div {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.infos p {
+	margin: 15px 0;
+}
+
+.text__content > p {
+	margin: 15px;
+}
+
+.tags__heading {
+	text-align: center;
+}
+
+.tags__content {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.tag {
+	margin: 10px;
+	border-radius: 5px;
+	box-shadow: 0 0 5px #9b9b9b;
+}
+
+.tag > p {
+	margin: 5px;
+}
+
+/* ========= LAYER 2 ========= */
+
+.ingredients, .utensils {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.ingredients__heading, .utensils__heading {
+	text-align: center;
+}
+
+.ingredients__content, .utensils__content {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.ingredient, .utensil {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	width: 400px;
+	height: 200px;
+	margin: 15px;
+
+	border-radius: 10px;
+	box-shadow: 0 0 8px #9b9b9b;
+}
+
+.ingredient__fig, .utensil__fig {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-end;
+
+	height: 100%;
+	flex: 1;
+}
+
+.ingredient__fig > img, .utensil__fig > img {
+	max-height: 90%;
+	max-width: 90%;
+	aspect-ratio: auto;
+}
+
+.ingredient__text, .utensil__text {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	height: 100%;
+	flex: 1;
+}
+
+.ingredient__text > p, .utensil__text > p {
+	font-size: 25px;
+	margin: 5px;
+}
+
+/* ========= LAYER 3 ========= */
+
+.steps {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.steps__heading {
+	text-align: center;
+}
+
+.steps__content {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+}
+
+.step {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	width: 1000px;
+	margin: 15px;
+
+	border-radius: 10px;
+	box-shadow: 0 0 8px #9b9b9b;
+
+	font-size: 25px;
+}
+
+.step__num {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	flex: 1;
+}
+
+.step__text {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	flex: 9;
+}
+
+.step__text > p {
+	margin: 10px 15px 10px 0;
+}
+
+/* ========= LAYER 4 ========= */
+
+.comments {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.comments__heading {
+	text-align: center;
+}
+
+.comments__content {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+}
+
+.comment {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	width: 1000px;
+	margin: 15px;
+
+	border-radius: 10px;
+	box-shadow: 0 0 8px #9b9b9b;
+
+	font-size: 25px;
+}
+
+.comment > p {
+	margin: 10px 15px;
+	word-break: break-word;
+}
+
+/* ========= LAYER 5 ========= */
+
+.layer5 > div {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 50px;
+}
+
+.delete-btn {
+	margin-right: 50px;
+}
+
+.edit-btn {
+	margin-left: 50px;
+}
+

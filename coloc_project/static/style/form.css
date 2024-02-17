@@ -1,0 +1,30 @@
+.foreground {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+
+	margin-top: 50px;
+	padding: 50px;
+}
+
+.field-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	padding: 20px;
+	margin: 10px;
+}
+
+input, textarea {
+	font-size: 30px;
+}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_headers %}
+	<link rel="stylesheet" type="text/css" href="{% static 'recipe/style/base.css' %}">
+	{% block recipe_extra_headers %}{% endblock recipe_extra_headers %}
+{% endblock extra_headers %}
+
+{% block navbar-left %}
+	{% if perms.recipe.add_recipe or perms.recipe.add_ingredient or perms.recipe.add_utensil or perms.recipe.add_tag %}
+	<div class="create-btn">
+		<a href="#">
+			<img src="{% static 'recipe/images/plus.png' %}">
+		</a>
+		<div class="create-dropdown-menu">
+			{% if perms.recipe.add_recipe %}
+			<div class="create-dropdown-item">
+				<a href="{% url 'recipe:create-recipe' %}"><p>Recette</p></a>
+			</div>
+			{% endif %}
+			{% if perms.recipe.add_ingredient %}
+			<div class="create-dropdown-item">
+				<a href="{% url 'recipe:create-ingredient' %}"><p>Ingrédient</p></a>
+			</div>
+			{% endif %}
+			{% if perms.recipe.add_utensil %}
+			<div class="create-dropdown-item">
+				<a href="{% url 'recipe:create-utensil' %}"><p>Ustensile</p></a>
+			</div>
+			{% endif %}
+			{% if perms.recipe.add_tag %}
+			<div class="create-dropdown-item">
+				<a href="{% url 'recipe:create-tag' %}"><p>Tag</p></a>
+			</div>
+			{% endif %}
+		</div>
+		<script type="text/javascript" src="{% static 'recipe/js/create-btn.js' %}"></script>
+	</div>
+	{% endif %}
+{% endblock navbar-left %}
+
+{% block header-title %}
+	<h1>Recettes</h1>
+{% endblock header-title %}

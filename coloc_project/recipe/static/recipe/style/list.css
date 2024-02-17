@@ -1,0 +1,187 @@
+.layer1 {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	margin-top: 30px;
+}
+
+.layer1 > form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 30px;
+}
+
+.form-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.field-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+input {
+	font-size: 25px;
+	margin: 0 10px;
+}
+
+
+
+
+
+.layer2 {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	width: 100%;
+}
+
+.recipes {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+}
+
+.recipes__content {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.recipe {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	width: 700px;
+	height: 200px;
+
+	margin: 30px;
+
+	border-radius: 10px;
+	box-shadow: 0 0 8px #9b9b9b;
+
+	overflow: hidden;
+}
+
+.recipe__fig {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-end;
+	height: 100%;
+	width: 30%;
+}
+
+.recipe__fig > img {
+	min-width: 100%;
+	min-height: 100%;
+	aspect-ratio: auto;
+}
+
+.recipe__text {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: justify;
+	height: 100%;
+	width: 70%;
+}
+
+.recipe__text p {
+	font-size: 20px;
+	word-break: break-word;
+	text-align: center;
+}
+
+.title {
+	margin: 0 30px;
+	max-height: 32%;
+	overflow: hidden;
+}
+
+.title > p {
+	margin: 0;
+	font-size: 25px;
+	font-weight: bold;
+}
+
+
+
+.text {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: justify;
+	flex: 1;
+}
+
+
+.infos {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.infos > div {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+
+	margin: 0 20px;
+}
+
+.infos > div > p {
+	margin: 3px 0;
+}
+
+
+
+
+
+
+.tags {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	margin-bottom: 2px;
+}
+
+.tag {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	margin: 5px;
+
+	border-radius: 5px;
+	box-shadow: 0 0 5px #9b9b9b;
+}
+
+.tag > p {
+	margin: 5px;
+	font-size: 15px;
+}
+
+
+
+

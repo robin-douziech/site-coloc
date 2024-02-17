@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_headers %}
+	<link rel="stylesheet" type="text/css" href="{% static 'style/form.css' %}">
+{% endblock extra_headers %}
+
+{% block header-title %}
+	<h1>Connexion</h1>
+{% endblock header-title %}
+
+{% block foreground %}
+	<form action="" method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Connexion">		
+	</form>
+{% endblock foreground %}

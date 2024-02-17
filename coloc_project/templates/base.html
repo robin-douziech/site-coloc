@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+	<head>
+		<title>coloc</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'style/base.css' %}">
+		{% block extra_headers %}{% endblock extra_headers %}
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8">
+	</head>
+	<body>
+
+		<header>
+			<div class="navbar navbar-left">
+				<div class="home-btn">
+					<a href="/coloc/">
+						<img src="{% static 'images/home.png' %}">
+					</a>
+				</div>
+				{% block navbar-left %}{% endblock navbar-left %}
+			</div>
+			<div class="header-title">
+				{% block header-title %}{% endblock header-title %}
+			</div>
+			<div class="navbar navbar-right">
+				{% block navbar-right %}{% endblock navbar-right %}
+				<div class="hamburger-menu">
+					<a href="#">
+						<img src="{% static 'images/menu.png' %}">
+					</a>
+					<div class="hamburger-dropdown-menu">
+						{% if user.is_authenticated %}
+						<div class="hamburger-dropdown-item">
+							<a href="{% url 'user:change-password' %}"><p>Modifier mot de passe</p></a>
+						</div>
+						{% if perms.user.add_user %}
+							<div class="hamburger-dropdown-item">
+								<a href="{% url 'user:create-user' %}"><p>Créer un utilisateur</p></a>
+							</div>
+						{% endif %}
+						<div class="hamburger-dropdown-item">
+							<a href="{% url 'user:logout' %}"><p>Se déconnecter</p></a>
+						</div>
+						{% else %}
+						<div class="hamburger-dropdown-item">
+							<a href="{% url 'user:login' %}"><p>Se connecter</p></a>
+						</div>
+						{% endif %}
+						<script type="text/javascript" src="{% static 'js/hamburger-dropdown.js' %}"></script>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<div class="foreground">
+			{% block foreground %}{% endblock foreground %}
+		</div>
+
+		<footer>
+			{% block footer %}{% endblock footer %}
+		</footer>
+
+	</body>
+</html>
