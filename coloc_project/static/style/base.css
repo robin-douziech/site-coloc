@@ -155,10 +155,3 @@ a {
 	margin: 5px;
 	word-break: break-word;
 }
-
-
-
-
-div, a, p {
-	border: 1px solid black;
-}
