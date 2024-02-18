@@ -19,7 +19,7 @@ header {
 }
 
 .header-title {
-	flex: 1;
+	flex: 2;
 }
 
 .header-title > h1 {
@@ -154,4 +154,11 @@ a {
 .hamburger-dropdown-item > a > p {
 	margin: 5px;
 	word-break: break-word;
+}
+
+
+
+
+div, a, p {
+	border: 1px solid black;
 }
