@@ -18,7 +18,7 @@
 
 .app {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 
@@ -28,4 +28,8 @@
 
 	border-radius: 10px;
 	box-shadow: 0 0 8px #9b9b9b;
+}
+
+.app > p {
+	margin: 5px;
 }

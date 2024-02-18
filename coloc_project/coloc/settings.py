@@ -103,7 +103,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'user.User'
-
+LOGIN_URL = 'user:login'
+LOGOUT_REDIRECT_URL = '/coloc/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
