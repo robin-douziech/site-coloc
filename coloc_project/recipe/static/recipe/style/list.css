@@ -1,20 +1,30 @@
-input {
-	font-size: 30px;
+.form-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .field-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
 	margin: 0 0 20px 0;
+}
+
+input {
+	font-size: 30px;
 }
 
 input[type="submit"] {
 	margin: 10px;
 }
 
-.form-container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+
+div, a, p {
+	border: 1px solid black;
 }
 
 
@@ -33,6 +43,19 @@ input[type="submit"] {
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
+	width: 100%;
+}
+
+.layer1-1 > form {
+	width: 40%;
+}
+
+.layer1-1 .field-container {
+	width: 70%;
+}
+
+.layer1-1 .field-container input {
+	width: 100%;
 }
 
 .layer1-2 {

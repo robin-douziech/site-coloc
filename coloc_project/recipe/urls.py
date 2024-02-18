@@ -19,6 +19,6 @@ urlpatterns = [
     path('delete-ingredient', views.delete_ingredient, name="delete-ingredient"),
     path('delete-utensil', views.delete_utensil, name="delete-utensil"),
     path('delete-recipe', views.delete_recipe, name="delete-recipe"),
-    #path('delete-ingredient-from-search', views.delete_ingredient_from_search, name="delete-ingredient-from-search"),
-    #path('delete-tag-from-search', views.delete_tag_from_search, name="delete-tag-from-search"),
+    path('delete-ingredient-from-search', views.delete_ingredient_from_search, name="delete-ingredient-from-search"),
+    path('delete-tag-from-search', views.delete_tag_from_search, name="delete-tag-from-search"),
 ]
