@@ -235,6 +235,7 @@ class AddIngredientRecipeRelationshipForm(forms.ModelForm):
 	
 	def __init__(self, recipe, *args, **kwargs):
 		super(AddIngredientRecipeRelationshipForm, self).__init__(*args, **kwargs)
+		self.fields['ingredient'].queryset = models.Ingredient.objects.exclude(pk__in=recipe.ingredients.all())
 		self.fields['quantity'].initial = ""
 		self.recipe = recipe
 
