@@ -1,41 +1,89 @@
 .layer1 {
 	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: flex-start;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
 	margin-top: 30px;
 }
 
-.layer1 > form {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	margin: 30px;
-}
-
-.form-container {
+.layer1-1 {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
 }
 
-.field-container {
+.layer1-2 {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	width: 100%;
+}
+
+.layer1-2 > div {
+	width: 50%;
+}
+
+
+
+
+.ingredients {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+	flex-wrap: wrap;
 }
 
-input {
-	font-size: 25px;
-	margin: 0 10px;
+.ingredient {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	width: 150px;
+	height: 30px;
+	margin: 10px;
+	border-radius: 5px;
+	box-shadow: 0 0 5px #9b9b9b;
 }
 
+.ingredient > div {
+	height: 100%;
+}
 
+.ingredient__text {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex: 4;
+}
 
+.ingredient__text > p {
+	margin: 0;
+	word-break: break-word;
+}
 
+.ingredient__del {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex: 1;
+}
+
+.ingredient__del > a {
+	width: 80%;
+	height: 80%;
+}
+
+.ingredient__del > a > img {
+	max-width: 100%;
+	max-height: 100%;
+	aspect-ratio: auto;
+}
 
 .layer2 {
 	display: flex;
@@ -110,12 +158,12 @@ input {
 
 .title {
 	margin: 0 30px;
-	max-height: 32%;
+	max-height: 34%;
 	overflow: hidden;
 }
 
 .title > p {
-	margin: 0;
+	margin: 5px 0 0 0;
 	font-size: 25px;
 	font-weight: bold;
 }
