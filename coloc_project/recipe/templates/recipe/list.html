@@ -8,10 +8,41 @@
 
 {% block foreground %}
 	<div class="layer1">
-		<form action="" method="get">
-			{% csrf_token %}
-			{{ form.as_p }}
-		</form>
+		<div class="layer1-1">
+			<form action="" method="get">
+				{% csrf_token %}
+				{{ search_form.as_p }}
+			</form>
+		</div>
+		<div class="layer1-2">
+			<!--div class="ingredient-form">
+				<div class="ingredients">
+					{% for ingredient in ingredients %}
+						<div class="ingredient">
+							<div class="ingredient__text">
+								<p>{{ ingredient.name }}</p>
+							</div>
+							<div class="ingredient__del">
+								<a href="{% url 'recipe:delete-ingredient-from-search' %}?id={{ingredient.id}}">
+									<img src="{% static 'recipe/images/black-cross.png' %}">
+								</a>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+				<form action="" method="get">
+					{% csrf_token %}
+					{{ ingredient_form.as_p }}
+					<input type="submit" name="">
+				</form>
+			</div-->
+			<!--div class="tag-form">
+				<form action="" method="get">
+					{% csrf_token %}
+					{{ tag_form.as_p }}
+				</form>
+			</div-->
+		</div>
 	</div>
 	<div class="layer2">
 		<div class="recipes">

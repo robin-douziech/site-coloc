@@ -1,5 +1,7 @@
 from django import forms
 from django.utils.safestring import mark_safe
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.conf import settings
 from django.urls import reverse
@@ -18,6 +20,23 @@ class MyCreateModelForm(forms.ModelForm):
 			html_string += f"\t</div>\n"
 		html_string += "</div>"
 		return mark_safe(html_string)
+
+	def clean(self, *args, **kwargs):
+		cleaned_data = super().clean(*args, **kwargs)
+		for field_name in self.Meta.unique_fields :
+			for instance in self.Meta.model.objects.all():
+				instance_field_value = getattr(instance, field_name)
+				cleaned_data_value = cleaned_data[field_name]
+				if isinstance(instance_field_value, str):
+					instance_field_value = instance_field_value.lower()
+					cleaned_data_value = cleaned_data[field_name].lower()
+				if instance_field_value == cleaned_data_value:
+					raise ValidationError(
+						_("Invalid value: %(value)s"),
+						params={'value': field_name},
+						code="invalid"
+					)
+		return cleaned_data
 
 	def save(self, commit=True, *args, **kwargs):
 		instance = super(MyCreateModelForm, self).save(commit=False, *args, **kwargs)
@@ -91,6 +110,7 @@ class CreateRecipeForm(MyCreateModelForm):
 	class Meta:
 		model = models.Recipe
 		fields = ['title', 'prep_duration', 'cook_duration', 'image']
+		unique_fields = ['title']
 		widgets = {
 			'title': forms.TextInput(attrs={'placeholder': "Titre de la recette"}),
 			'prep_duration': forms.TextInput(attrs={'placeholder': "Temps de préparation (hh:mm:ss)"}),
@@ -108,6 +128,7 @@ class CreateIngredientForm(MyCreateModelForm):
 	class Meta:
 		model = models.Ingredient
 		exclude = []
+		unique_fields = ['name']
 		widgets = {
 			'name': forms.TextInput(attrs={'placeholder': "Nom de l'ingrédient"})
 		}
@@ -123,6 +144,7 @@ class CreateUtensilForm(MyCreateModelForm):
 	class Meta:
 		model = models.Utensil
 		exclude = []
+		unique_fields = ['name']
 		widgets = {
 			'name': forms.TextInput(attrs={'placeholder': "Nom de l'ustensile"})
 		}
@@ -137,28 +159,10 @@ class CreateTagForm(MyCreateModelForm):
 	class Meta:
 		model = models.Tag
 		exclude = []
+		unique_fields = ['text']
 		widgets = {
 			'text': forms.TextInput(attrs={'placeholder': "Texte du tag"})
 		}
-
-class SearchRecipeForm(forms.Form):
-
-	def __init__(self, request, *args, **kwargs):
-		super(SearchRecipeForm, self).__init__(*args, **kwargs)
-		self.fields['search'].initial = request.GET.get('search', '')
-
-	def as_p(self):
-		html_string  = "<div class=\"form-container\">\n"
-		html_string += f"\t<div class=\"field-container\">\n"
-		html_string += f"\t\t{self['search']}<input type=\"submit\" value=\"Chercher\">\n"
-		html_string += f"\t</div>\n"
-		html_string += "</div>"
-		return mark_safe(html_string)
-
-	search = forms.CharField(
-		label = "Texte de la recherche",
-		max_length = 100
-	)
 
 class ChangePrepDurationForm(MyEditModelForm):
 
@@ -371,3 +375,67 @@ class AddCommentForm(AddStepOrCommentForm):
 		widgets = {
 			'text': forms.Textarea()
 		}
+
+class SearchRecipeForm(forms.Form):
+	
+	def __init__(self, request, *args, **kwargs):
+	    initial = kwargs.pop('initial', {})
+	    super(SearchRecipeForm, self).__init__(*args, **kwargs)
+	    self.fields['search'].initial = initial.get('search', '')
+	    self.fields['max_duration'].initial = initial.get('max_duration', '')
+
+	def save(self, request):
+		search_recipe = request.session.get('search_recipe', {
+			'search': "",
+			'max_duration': "",
+			'ingredients': [],
+			'tags': []
+		})
+		search_recipe['search'] = self.cleaned_data['search']
+		search_recipe['max_duration'] = self.cleaned_data['max_duration']
+		request.session['search_recipe'] = search_recipe
+
+	def as_p(self):
+		html_string = "<div class=\"form-container\">\n"
+		for field_name in self.fields :
+			html_input = f"<input "
+			html_input += f" id=\"id_{field_name}\""
+			html_input += f" type=\"{self.fields[field_name].widget.input_type}\""
+			html_input += f" name=\"{field_name}\""
+			html_input += f" value=\"{self.fields[field_name].initial}\""
+			for validator in self.fields[field_name].validators:
+				if isinstance(validator, RegexValidator):
+					regex = r"{}".format(validator.regex.pattern)
+					html_input += f" pattern=\"{regex}\""
+			if isinstance(self.fields[field_name], forms.IntegerField):
+				for validator in self.fields[field_name].validators:
+					if isinstance(validator, MinValueValidator):
+						html_input += f" min=\"{validator.limit_value}\""
+					elif isinstance(validator, MaxValueValidator):
+						html_input += f" max=\"{validator.limit_value}\""
+			for attr in self.fields[field_name].widget.attrs:
+				html_input += f" {attr}=\"{self.fields[field_name].widget.attrs[attr]}\""
+			html_input += f"{' required' if self.fields[field_name].required else ''}"
+			html_input += f"{' disabled' if self.fields[field_name].disabled else ''}"
+			html_input += ">"
+
+			html_string += f"\t<div class=\"field-container\">\n"
+			html_string += f"\t\t{html_input}\n"
+			html_string += f"\t</div>\n"
+		html_string += "<input type=\"submit\" value=\"valider\">\n"
+		html_string += "</div>"
+		return mark_safe(html_string)
+
+	search = forms.CharField(
+		label = "Texte de la recherche",
+		max_length = 100,
+		required = False,
+		widget = forms.TextInput(attrs={'placeholder': "Rechercher"})
+	)
+
+	max_duration = forms.CharField(
+		label = "Durée maximum",
+		validators = [RegexValidator(r"^[0-9]{1,2}:[0-5][0-9]:[0-5][0-9]$")],
+		required = False,
+		widget = forms.TextInput(attrs={'placeholder': "Durée maximale (cuisson comprise)"})
+	)

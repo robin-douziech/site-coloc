@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
+from django.db.models import F
+from datetime import timedelta
+from django.http import HttpResponse
 
 from coloc import helpers
 from . import models, forms
@@ -37,16 +40,53 @@ def create_tag(request):
 	return my_model_form_view(request, forms.CreateTagForm, "recipe/create/tag.html")
 
 def list(request):
+
 	current_page = reverse('recipe:list')
-	form = forms.SearchRecipeForm(request, request.GET)
-	results = []
-	if form.is_valid():
-		current_page = f"{reverse('recipe:list')}?search={form.cleaned_data['search']}"
-		results = models.Recipe.objects.filter(
-			title__contains=form.cleaned_data['search']
+
+	request.session['search_recipe'] = request.session.get('search_recipe', {
+		'search': "",
+		'max_duration': "",
+		'ingredients': [],
+		'tags': []
+	})
+
+	for key in request.session.keys():
+		print(f"RS {key}: {request.session[key]}")
+
+	print(f"search: {request.session['search_recipe']['search']}")
+	print(f"max_duration: {request.session['search_recipe']['max_duration']}")
+	print(f"ingredients: {' '.join([ingredient.name for ingredient in models.Ingredient.objects.filter(pk__in=request.session['search_recipe']['ingredients'])])}")
+	print(f"tags: {' '.join([tag.name for tag in models.Tag.objects.filter(pk__in=request.session['search_recipe']['tags'])])}")
+
+	initial_data = {
+		'search': request.GET.get('search', request.session['search_recipe']['search']),
+		'max_duration': request.GET.get('max_duration', request.session['search_recipe']['max_duration']),
+		'ingredient': None
+	}
+
+	forms_dic = {
+		'search_form': forms.SearchRecipeForm(request, request.GET, initial=initial_data),
+	}
+	for form in forms_dic:
+		if forms_dic[form].is_valid():
+			forms_dic[form].save(request)
+
+	ingredients = models.Ingredient.objects.filter(pk__in=request.session['search_recipe']['ingredients'])
+	results = models.Recipe.objects.filter(title__icontains=request.session['search_recipe']['search'])
+	if request.session['search_recipe']['max_duration'] != "" :
+		max_duration = timedelta(
+			hours = int(request.session['search_recipe']['max_duration'].split(':')[0]),
+			minutes = int(request.session['search_recipe']['max_duration'].split(':')[1]),
+			seconds = int(request.session['search_recipe']['max_duration'].split(':')[2]),
 		)
+		results = results.filter(prep_duration__lte=max_duration-F('cook_duration'))
+
 	helpers.register_view(request, current_page)
-	return render(request, "recipe/list.html", {'form': form, 'results': results})
+	return render(request, "recipe/list.html", {
+		'results': results,
+		**forms_dic,
+		'ingredients': ingredients
+	})
 
 def details(request):
 	recipe_id = request.GET.get('id', False)
@@ -192,4 +232,25 @@ def delete_recipe(request):
 		recipe.delete()
 	return redirect(reverse('recipe:list'))
 
+def delete_ingredient_from_search(request):
+	ingredient_id = int(request.GET.get('id', False))
+	if ingredient_id :
+		search_recipe = request.session.get('search_recipe', False)
+		if search_recipe :
+			ingredients = search_recipe.get('ingredients', False)
+			if ingredients :
+				if ingredient_id in ingredients:
+					ingredients.remove(ingredient_id)
+				search_recipe.pop('ingredients')
+				search_recipe['ingredients'] = ingredients
+			request.session.pop('search_recipe')
+			request.session['search_recipe'] = search_recipe
+	return redirect(reverse('recipe:list'))
 
+
+def delete_tag_from_search(request):
+	search_recipe = request.session.get('search_recipe', False)
+	tag_id = request.GET.get('id', False)
+	if search_recipe and tag_id and 'tags' in search_recipe and tag_id in search_recipe['tags'] :
+		request.session['search_recipe']['tags'].remove(tag_id)
+	return redirect(reverse('recipe:list'))

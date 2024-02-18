@@ -44,10 +44,18 @@
 	justify-content: center;
 	align-items: center;
 	height: 100%;
-	width: 50%;
+}
+
+.utensil__fig {
+	width: 40%;
+}
+
+.utensil__text {
+	width: 60%;
 }
 
 .utensil__text > p {
+	margin: 0 10px;
 	word-break: break-word;
 	text-align: center;
 	font-size: 25px;
@@ -58,9 +66,3 @@
 	max-height: 90%;
 	aspect-ratio: auto;
 }
-
-
-
-
-
-
