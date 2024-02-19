@@ -122,8 +122,12 @@
 	<div class="layer layer5">
 		{% block layer5 %}
 		<div>
-			<a class="btn btn--red delete-btn" href="{% url 'recipe:delete-recipe' %}?id={{recipe.id}}"><p>Supprimer</p></a>
-			<a class="btn btn--blue edit-btn" href="{% url 'recipe:edit' %}?id={{recipe.id}}"><p>Modifier</p></a>
+			{% if perms.recipe.del_recipe %}
+				<a class="btn btn--red delete-btn" href="{% url 'recipe:delete-recipe' %}?id={{recipe.id}}"><p>Supprimer</p></a>
+			{% endif %}
+			{% if perms.recipe.change_recipe %}
+				<a class="btn btn--blue edit-btn" href="{% url 'recipe:edit' %}?id={{recipe.id}}"><p>Modifier</p></a>
+			{% endif %}
 		</div>
 		{% endblock layer5 %}
 	</div>

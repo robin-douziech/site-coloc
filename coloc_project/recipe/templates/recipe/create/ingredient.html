@@ -30,7 +30,9 @@
 						</div>
 						<div class="ingredient__text">
 							<p>{{ ingredient.name }}</p>
-							<a class="btn btn--red" href="{% url 'recipe:delete-ingredient' %}?id={{ingredient.id}}">Supprimer</a>
+							{% if perms.recipe.del_ingredient %}
+								<a class="btn btn--red" href="{% url 'recipe:delete-ingredient' %}?id={{ingredient.id}}">Supprimer</a>
+							{% endif %}
 						</div>
 					</div>
 				{% endfor %}
