@@ -4,4 +4,3 @@ def register_view(request, current_page):
 		if len(request.session['previous_pages']) >= 10 :
 			request.session['previous_pages'].pop(0)
 		request.session['previous_pages'].append(current_page)
-	print(request.session['previous_pages'])
