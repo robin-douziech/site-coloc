@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.db.models import F
 from datetime import timedelta, datetime
 from django.http import HttpResponse
+import logging
 
 from coloc import helpers
 from . import models, forms
@@ -80,6 +81,7 @@ def list(request):
 	if request.session['search_recipe']['seasonal']:
 		for recipe in results :
 			print(f"=== RECIPE: {recipe.title} ===")
+			logging.info(f"=== RECIPE: {recipe.title} ===")
 			seasons = []
 			for ingredient in recipe.ingredients.all():
 				season = []
@@ -94,8 +96,10 @@ def list(request):
 					season.append(end)
 					seasons.append(season)
 					print(f"INGREDIENT {ingredient.name}: {season}")
+					logging.info(f"INGREDIENT {ingredient.name}: {season}")
 				else:
 					print(f"INGREDIENT {ingredient.name}: pas de saison")
+					logging.info(f"INGREDIENT {ingredient.name}: pas de saison")
 			if len(seasons) > 0 :
 				seasonal = False
 				index = 0
@@ -107,8 +111,10 @@ def list(request):
 				if not(seasonal) :
 					results = results.exclude(pk=recipe.id)
 					print(f"RESULTAT: hors saison")
+					logging.info(f"RESULTAT: hors saison")
 				else :
 					print(f"RESULTAT: saison")
+					logging.info(f"RESULTAT: saison")
 
 	helpers.register_view(request, current_page)
 	return render(request, "recipe/list.html", {
