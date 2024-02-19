@@ -79,22 +79,23 @@ def list(request):
 	# On supprime les recettes qui ne sont pas de saison si "recettes de saison uniquement" est coché
 	if request.session['search_recipe']['seasonal']:
 		for recipe in results :
+			print(f"=== RECIPE: {recipe.title} ===")
 			seasons = []
 			for ingredient in recipe.ingredients.all():
 				season = []
 				if ingredient.months is not None :
 					month = int(ingredient.months.split('-')[0])
 					end = int(ingredient.months.split('-')[1])
-					print(f"month: {month}")
-					print(f"end: {end}")
 					while month != end :
-						print(f"{month}/{end}")
 						season.append(month)
 						month += 1
 						if month == 13:
 							month = 1
 					season.append(end)
 					seasons.append(season)
+					print(f"INGREDIENT {ingredient.name}: {season}")
+				else:
+					print(f"INGREDIENT {ingredient.name}: pas de saison")
 			if len(seasons) > 0 :
 				seasonal = False
 				index = 0
@@ -105,6 +106,9 @@ def list(request):
 					index += 1
 				if not(seasonal) :
 					results = results.exclude(pk=recipe.id)
+					print(f"RESULTAT: hors saison")
+				else :
+					print(f"RESULTAT: saison")
 
 	helpers.register_view(request, current_page)
 	return render(request, "recipe/list.html", {
