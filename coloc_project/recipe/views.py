@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
 from django.db.models import F
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.http import HttpResponse
 
 from coloc import helpers
@@ -46,27 +46,22 @@ def list(request):
 	request.session['search_recipe'] = request.session.get('search_recipe', {
 		'search': "",
 		'max_duration': "",
+		'seasonal': False,
 		'ingredients': [],
 		'tags': []
-	})
-
-	for key in request.session.keys():
-		print(f"RS {key}: {request.session[key]}")
-
-	print(f"search: {request.session['search_recipe']['search']}")
-	print(f"max_duration: {request.session['search_recipe']['max_duration']}")
-	print(f"ingredients: {' '.join([ingredient.name for ingredient in models.Ingredient.objects.filter(pk__in=request.session['search_recipe']['ingredients'])])}")
-	print(f"tags: {' '.join([tag.name for tag in models.Tag.objects.filter(pk__in=request.session['search_recipe']['tags'])])}")
+	})	
 
 	initial_data = {
 		'search': request.GET.get('search', request.session['search_recipe']['search']),
 		'max_duration': request.GET.get('max_duration', request.session['search_recipe']['max_duration']),
+		'seasonal': True if request.GET.get('seasonal', '')=="on" else False,
 		'ingredient': None
 	}
 
 	forms_dic = {
 		'search_form': forms.SearchRecipeForm(request, request.GET, initial=initial_data),
 	}
+
 	for form in forms_dic:
 		if forms_dic[form].is_valid():
 			forms_dic[form].save(request)
@@ -80,6 +75,36 @@ def list(request):
 			seconds = int(request.session['search_recipe']['max_duration'].split(':')[2]),
 		)
 		results = results.filter(prep_duration__lte=max_duration-F('cook_duration'))
+
+	# On supprime les recettes qui ne sont pas de saison si "recettes de saison uniquement" est coché
+	if request.session['search_recipe']['seasonal']:
+		for recipe in results :
+			seasons = []
+			for ingredient in recipe.ingredients.all():
+				season = []
+				if ingredient.months is not None :
+					month = int(ingredient.months.split('-')[0])
+					end = int(ingredient.months.split('-')[1])
+					print(f"month: {month}")
+					print(f"end: {end}")
+					while month != end :
+						print(f"{month}/{end}")
+						season.append(month)
+						month += 1
+						if month == 13:
+							month = 1
+					season.append(end)
+					seasons.append(season)
+			if len(seasons) > 0 :
+				seasonal = False
+				index = 0
+				current_month = int(datetime.now().strftime('%m'))
+				while not(seasonal) and index<len(seasons):
+					if current_month in seasons[index]:
+						seasonal = True
+					index += 1
+				if not(seasonal) :
+					results = results.exclude(pk=recipe.id)
 
 	helpers.register_view(request, current_page)
 	return render(request, "recipe/list.html", {

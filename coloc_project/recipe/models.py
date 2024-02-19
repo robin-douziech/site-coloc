@@ -2,6 +2,7 @@ from django.db import models
 from datetime import timedelta
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
+from django.utils.translation import gettext_lazy as _
 import shutil
 
 def recipe_name(instance, filename):
@@ -30,6 +31,14 @@ class Ingredient(models.Model):
 		verbose_name = "Nom",
 		max_length = 50,
 		default = "Ingrédient sans nom"
+	)
+
+	months = models.CharField(
+		verbose_name = "Mois",
+		max_length = 26,
+		null = True,
+		blank = True,
+		validators = [RegexValidator(r"^(([1-9]|1[0-2])-([1-9]|1[0-2]))$")]
 	)
 
 	image = models.ImageField(

@@ -12,6 +12,7 @@
 	align-items: center;
 
 	margin: 0 0 20px 0;
+	font-size: 25px;
 }
 
 input {
@@ -20,6 +21,12 @@ input {
 
 input[type="submit"] {
 	margin: 10px;
+}
+
+input[type="checkbox"] {
+	width: auto;
+	margin: 0 10px;
+	transform: scale(1.5);
 }
 
 .layer1 {
@@ -46,7 +53,7 @@ input[type="submit"] {
 	width: 70%;
 }
 
-.layer1-1 .field-container input {
+.layer1-1 .field-container input[type="text"] {
 	width: 100%;
 }
 

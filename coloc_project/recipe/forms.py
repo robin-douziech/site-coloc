@@ -130,7 +130,8 @@ class CreateIngredientForm(MyCreateModelForm):
 		exclude = []
 		unique_fields = ['name']
 		widgets = {
-			'name': forms.TextInput(attrs={'placeholder': "Nom de l'ingrédient"})
+			'name': forms.TextInput(attrs={'placeholder': "Nom de l'ingrédient"}),
+			'months': forms.TextInput(attrs={'placeholder': 'c kan ke sa pous ? (début-fin)'})
 		}
 
 class CreateUtensilForm(MyCreateModelForm):
@@ -258,6 +259,11 @@ class AddIngredientRecipeRelationshipForm(forms.ModelForm):
 		html_string += "</div>"
 		return mark_safe(html_string)
 
+	def get_choices(self):
+		queryset = self.fields['ingredient'].queryset
+		choices = [(obj.id, obj.name) for obj in queryset]
+		return choices
+
 	class Meta:
 		model = models.RecipeIngredientRelationship
 		exclude = ['recipe']
@@ -384,16 +390,19 @@ class SearchRecipeForm(forms.Form):
 	    super(SearchRecipeForm, self).__init__(*args, **kwargs)
 	    self.fields['search'].initial = initial.get('search', '')
 	    self.fields['max_duration'].initial = initial.get('max_duration', '')
+	    self.fields['seasonal'].initial = initial.get('seasonal', False)
 
 	def save(self, request):
 		search_recipe = request.session.get('search_recipe', {
 			'search': "",
 			'max_duration': "",
+			'seasonal': False,
 			'ingredients': [],
 			'tags': []
 		})
 		search_recipe['search'] = self.cleaned_data['search']
 		search_recipe['max_duration'] = self.cleaned_data['max_duration']
+		search_recipe['seasonal'] = self.cleaned_data['seasonal']
 		request.session['search_recipe'] = search_recipe
 
 	def as_p(self):
@@ -403,7 +412,10 @@ class SearchRecipeForm(forms.Form):
 			html_input += f" id=\"id_{field_name}\""
 			html_input += f" type=\"{self.fields[field_name].widget.input_type}\""
 			html_input += f" name=\"{field_name}\""
-			html_input += f" value=\"{self.fields[field_name].initial}\""
+			if isinstance(self.fields[field_name], forms.BooleanField):
+				html_input += f"{' checked' if self.fields[field_name].initial else ''}"
+			else:
+				html_input += f" value=\"{self.fields[field_name].initial}\""
 			for validator in self.fields[field_name].validators:
 				if isinstance(validator, RegexValidator):
 					regex = r"{}".format(validator.regex.pattern)
@@ -419,6 +431,9 @@ class SearchRecipeForm(forms.Form):
 			html_input += f"{' required' if self.fields[field_name].required else ''}"
 			html_input += f"{' disabled' if self.fields[field_name].disabled else ''}"
 			html_input += ">"
+
+			if isinstance(self.fields[field_name], forms.BooleanField):
+				html_input += f" {self.fields[field_name].label}"
 
 			html_string += f"\t<div class=\"field-container\">\n"
 			html_string += f"\t\t{html_input}\n"
@@ -439,4 +454,9 @@ class SearchRecipeForm(forms.Form):
 		validators = [RegexValidator(r"^[0-9]{1,2}:[0-5][0-9]:[0-5][0-9]$")],
 		required = False,
 		widget = forms.TextInput(attrs={'placeholder': "Durée maximale (cuisson comprise)"})
+	)
+
+	seasonal = forms.BooleanField(
+		label = "recettes de saison uniquement",
+		required=False,
 	)
