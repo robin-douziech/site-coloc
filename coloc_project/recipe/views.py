@@ -79,42 +79,19 @@ def list(request):
 
 	# On supprime les recettes qui ne sont pas de saison si "recettes de saison uniquement" est coché
 	if request.session['search_recipe']['seasonal']:
+		current_month = int(datetime.now().strftime('%m'))
 		for recipe in results :
-			print(f"=== RECIPE: {recipe.title} ===")
-			logging.info(f"=== RECIPE: {recipe.title} ===")
-			seasons = []
 			for ingredient in recipe.ingredients.all():
-				season = []
 				if ingredient.months is not None :
 					month = int(ingredient.months.split('-')[0])
 					end = int(ingredient.months.split('-')[1])
-					while month != end :
-						season.append(month)
-						month += 1
-						if month == 13:
-							month = 1
-					season.append(end)
-					seasons.append(season)
-					print(f"INGREDIENT {ingredient.name}: {season}")
-					logging.info(f"INGREDIENT {ingredient.name}: {season}")
-				else:
-					print(f"INGREDIENT {ingredient.name}: pas de saison")
-					logging.info(f"INGREDIENT {ingredient.name}: pas de saison")
-			if len(seasons) > 0 :
-				seasonal = False
-				index = 0
-				current_month = int(datetime.now().strftime('%m'))
-				while not(seasonal) and index<len(seasons):
-					if current_month in seasons[index]:
-						seasonal = True
-					index += 1
-				if not(seasonal) :
-					results = results.exclude(pk=recipe.id)
-					print(f"RESULTAT: hors saison")
-					logging.info(f"RESULTAT: hors saison")
-				else :
-					print(f"RESULTAT: saison")
-					logging.info(f"RESULTAT: saison")
+					while month not in [current_month, end]:
+						month = month+1 if month<12 else 1
+					if month == end :
+						results = results.exclude(pk=recipe.id)
+						break
+					else :
+						continue
 
 	helpers.register_view(request, current_page)
 	return render(request, "recipe/list.html", {
