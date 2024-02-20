@@ -8,14 +8,9 @@
 
 {% block foreground %}
 	<div class="layer1">
-		<div class="layer1-1">
-			<form action="" method="get">
-				{% csrf_token %}
-				{{ search_form.as_p }}
-			</form>
-		</div>
-		<div class="layer1-2">
-			<!--div class="ingredient-form">
+		<div class="ingredient-form">
+			<div class="ingredient-form__heading"><h1>Recherche par ingrédient</h1></div>
+			<div class="ingredient-form__content">
 				<div class="ingredients">
 					{% for ingredient in ingredients %}
 						<div class="ingredient">
@@ -33,16 +28,76 @@
 				<form action="" method="get">
 					{% csrf_token %}
 					{{ ingredient_form.as_p }}
-					<input type="submit" name="">
 				</form>
-			</div-->
-			<!--div class="tag-form">
+			</div>
+		</div>
+		<div class="search-form">
+			<div class="search-form__heading"><h1>Recherche</h1></div>
+			<div class="search-form__content">
+				<form action="" method="get">
+					{% csrf_token %}
+					{{ search_form.as_p }}
+				</form>
+			</div>
+		</div>
+		<div class="tag-form">
+			<div class="tag-form__heading"><h1>Recherche par tag</h1></div>
+			<div class="tag-form__content">
+				<div class="tags">
+					{% for tag in tags %}
+						<div class="tag">
+							<div class="tag__text">
+								<p>{{ tag.text }}</p>
+							</div>
+							<div class="tag__del">
+								<a href="{% url 'recipe:delete-tag-from-search' %}?id={{tag.id}}">
+									<img src="{% static 'recipe/images/black-cross.png' %}">
+								</a>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+				<form action="" method="get">
+					{% csrf_token %}
+					{{ tag_form.as_p }}					
+				</form>
+			</div>
+		</div>
+		<!--div class="layer1-1">
+			<form action="" method="get">
+				{% csrf_token %}
+				{{ search_form.as_p }}
+			</form>
+		</div-->
+		<!--div class="layer1-2">
+			<div class="ingredient-form">
+				<div class="ingredients">
+					{% for ingredient in ingredients %}
+						<div class="ingredient">
+							<div class="ingredient__text">
+								<p>{{ ingredient.name }}</p>
+							</div>
+							<div class="ingredient__del">
+								<a href="{% url 'recipe:delete-ingredient-from-search' %}?id={{ingredient.id}}">
+									<img src="{% static 'recipe/images/black-cross.png' %}">
+								</a>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+				<form action="" method="get">
+					{% csrf_token %}
+					{{ ingredient_form.as_p }}
+					<input type="submit" value="valider">
+				</form>
+			</div>
+			<div class="tag-form">
 				<form action="" method="get">
 					{% csrf_token %}
 					{{ tag_form.as_p }}
 				</form>
-			</div-->
-		</div>
+			</div>
+		</div-->
 	</div>
 	<div class="layer2">
 		<div class="recipes">
@@ -58,7 +113,7 @@
 								<p>{{ recipe.title }}</p>
 							</div>
 							<div class="text">
-								<div class="infos">
+								<div class="recipe-infos">
 									<div>
 										<p>préparation: {{ recipe.prep_duration|hhmmss_to_mins }}</p>
 										<p>cuisson: {{ recipe.cook_duration|hhmmss_to_mins }}</p>
@@ -68,9 +123,9 @@
 										<p>note: {{ recipe.grade }}/10</p>
 									</div>
 								</div>
-								<div class="tags">
+								<div class="recipe-tags">
 									{% for tag in recipe.tags.all %}
-										<div class="tag"><p>{{ tag.text }}</p></div>
+										<div class="recipe-tag"><p>{{ tag.text }}</p></div>
 									{% endfor %}
 								</div>
 							</div>

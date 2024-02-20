@@ -438,7 +438,7 @@ class SearchRecipeForm(forms.Form):
 			html_string += f"\t<div class=\"field-container\">\n"
 			html_string += f"\t\t{html_input}\n"
 			html_string += f"\t</div>\n"
-		html_string += "<input type=\"submit\" value=\"valider\">\n"
+		html_string += "<input type=\"submit\" value=\"chercher\">\n"
 		html_string += "</div>"
 		return mark_safe(html_string)
 
@@ -459,4 +459,66 @@ class SearchRecipeForm(forms.Form):
 	seasonal = forms.BooleanField(
 		label = "recettes de saison uniquement",
 		required=False,
+	)
+
+class SelectIngredientForm(forms.Form):
+
+	def __init__(self, request, *args, **kwargs):
+		super(SelectIngredientForm, self).__init__(*args, **kwargs)
+		self.fields['ingredient'].queryset = models.Ingredient.objects.exclude(pk__in=request.session.get('search_recipe', {'ingredients': []})['ingredients']).order_by("name")
+
+	def save(self, request):
+		request.session['search_recipe'] = request.session.get('search_recipe', {
+			'search': "",
+			'max_duration': "",
+			'seasonal': False,
+			'ingredients': [],
+			'tags': []
+		})
+		ingredient = self.cleaned_data['ingredient']
+		request.session['search_recipe']['ingredients'].append(ingredient.id)
+
+	def as_p(self):
+		html_string = "<div class=\"form-container\">\n"
+		html_string += "\t<div class=\"field-container\">\n"
+		html_string += f"\t\t{self['ingredient']}\n"
+		html_string += "\t</div>\n"
+		html_string += "<input type=\"submit\" value=\"ajouter\">\n"
+		html_string += "</div>"
+		return mark_safe(html_string)
+
+	ingredient = forms.ModelChoiceField(
+		label = "Ingredient",
+		queryset = None
+	)
+
+class SelectTagForm(forms.Form):
+
+	def __init__(self, request, *args, **kwargs):
+		super(SelectTagForm, self).__init__(*args, **kwargs)
+		self.fields['tag'].queryset = models.Tag.objects.exclude(pk__in=request.session.get('search_recipe', {'tags': []})['tags']).order_by("text")
+
+	def save(self, request):
+		request.session['search_recipe'] = request.session.get('search_recipe', {
+			'search': "",
+			'max_duration': "",
+			'seasonal': False,
+			'ingredients': [],
+			'tags': []
+		})
+		tag = self.cleaned_data['tag']
+		request.session['search_recipe']['tags'].append(tag.id)
+
+	def as_p(self):
+		html_string = "<div class=\"form-container\">\n"
+		html_string += "\t<div class=\"field-container\">\n"
+		html_string += f"\t\t{self['tag']}\n"
+		html_string += "\t</div>\n"
+		html_string += "<input type=\"submit\" value=\"ajouter\">\n"
+		html_string += "</div>"
+		return mark_safe(html_string)
+
+	tag = forms.ModelChoiceField(
+		label = "Tag",
+		queryset = None
 	)

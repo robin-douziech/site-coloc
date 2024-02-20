@@ -42,6 +42,8 @@ def create_tag(request):
 
 def list(request):
 
+	#request.session.pop('search_recipe')
+
 	current_page = reverse('recipe:list')
 
 	request.session['search_recipe'] = request.session.get('search_recipe', {
@@ -61,14 +63,27 @@ def list(request):
 
 	forms_dic = {
 		'search_form': forms.SearchRecipeForm(request, request.GET, initial=initial_data),
+		'ingredient_form': forms.SelectIngredientForm(request, request.GET),
+		'tag_form': forms.SelectTagForm(request, request.GET)
 	}
 
 	for form in forms_dic:
 		if forms_dic[form].is_valid():
 			forms_dic[form].save(request)
 
-	ingredients = models.Ingredient.objects.filter(pk__in=request.session['search_recipe']['ingredients'])
+	### Recherche des recettes correspondant aux critères de recherche
+
 	results = models.Recipe.objects.filter(title__icontains=request.session['search_recipe']['search'])
+
+	# gestion des ingrédients et des tags :
+	# si des ingrédients et/ou des tags sont renseignés, on ne garde que les recettes comporant au moins l'un des ingrédients ET au moins l'un des tags
+	if len(request.session['search_recipe']['ingredients']+request.session['search_recipe']['tags']) > 0:
+		if len(request.session['search_recipe']['ingredients']) > 0 :
+			results = results.filter(ingredients__id__in=request.session['search_recipe']['ingredients']).distinct()
+		if len(request.session['search_recipe']['tags']) > 0 :
+			results = results.filter(tags__id__in=request.session['search_recipe']['tags']).distinct()
+
+	# On supprime les recettes trop longues si le champ "Durée maximale" est renseigné
 	if request.session['search_recipe']['max_duration'] != "" :
 		max_duration = timedelta(
 			hours = int(request.session['search_recipe']['max_duration'].split(':')[0]),
@@ -93,11 +108,15 @@ def list(request):
 					else :
 						continue
 
+	ingredients = models.Ingredient.objects.filter(pk__in=request.session['search_recipe']['ingredients']).order_by("name")
+	tags = models.Tag.objects.filter(pk__in=request.session['search_recipe']['tags']).order_by("text")
+
 	helpers.register_view(request, current_page)
 	return render(request, "recipe/list.html", {
 		'results': results,
 		**forms_dic,
-		'ingredients': ingredients
+		'ingredients': ingredients,
+		'tags': tags
 	})
 
 def details(request):
@@ -261,8 +280,15 @@ def delete_ingredient_from_search(request):
 
 
 def delete_tag_from_search(request):
-	search_recipe = request.session.get('search_recipe', False)
-	tag_id = request.GET.get('id', False)
-	if search_recipe and tag_id and 'tags' in search_recipe and tag_id in search_recipe['tags'] :
-		request.session['search_recipe']['tags'].remove(tag_id)
+	tag_id = int(request.GET.get('id', False))
+	if tag_id:
+		search_recipe = request.session.get('search_recipe', False)
+		if search_recipe :
+			tags = search_recipe.get('tags', False)
+			if tags :
+				tags.remove(tag_id)
+			search_recipe.pop('tags')
+			search_recipe['tags'] = tags
+		request.session.pop('search_recipe')
+		request.session['search_recipe'] = search_recipe
 	return redirect(reverse('recipe:list'))
