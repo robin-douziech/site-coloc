@@ -26,7 +26,9 @@
 				{% for utensil in utensils %}
 					<div class="utensil">
 						<div class="utensil__fig">
-							<img src="{{utensil.image.url}}">
+							<div class="utensil__imgwrapper">
+								<img src="{{utensil.image.url}}">
+							</div>
 						</div>
 						<div class="utensil__text">
 							<p>{{ utensil.name }}</p>

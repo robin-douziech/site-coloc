@@ -34,7 +34,7 @@
 
 	margin: 30px;
 
-	border-radius: 5px;
+	border-radius: 10px;
 	box-shadow: 0 0 8px #9b9b9b;
 }
 
@@ -50,6 +50,23 @@
 	width: 40%;
 }
 
+.ingredient__imgwrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 80%;
+	height: 80%;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.ingredient__imgwrapper > img {
+	min-width: 100%;
+	min-height: 100%;
+	aspect-ratio: auto;
+}
+
 .ingredient__text {
 	width: 60%;
 }
@@ -59,10 +76,4 @@
 	word-break: break-word;
 	text-align: center;
 	font-size: 25px;
-}
-
-.ingredient__fig > img {
-	max-width: 90%;
-	max-height: 90%;
-	aspect-ratio: auto;
 }

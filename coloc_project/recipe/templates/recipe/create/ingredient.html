@@ -26,7 +26,9 @@
 				{% for ingredient in ingredients %}
 					<div class="ingredient">
 						<div class="ingredient__fig">
-							<img src="{{ingredient.image.url}}">
+							<div class="ingredient__imgwrapper">
+								<img src="{{ingredient.image.url}}">
+							</div>
 						</div>
 						<div class="ingredient__text">
 							<p>{{ ingredient.name }}</p>
