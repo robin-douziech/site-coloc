@@ -465,7 +465,11 @@ class SelectIngredientForm(forms.Form):
 
 	def __init__(self, request, *args, **kwargs):
 		super(SelectIngredientForm, self).__init__(*args, **kwargs)
-		self.fields['ingredient'].queryset = models.Ingredient.objects.exclude(pk__in=request.session.get('search_recipe', {'ingredients': []})['ingredients']).order_by("name")
+		queryset = models.Ingredient.objects.exclude(pk__in=request.session.get('search_recipe', {'ingredients': []})['ingredients']).order_by("name")
+		#ingredient_id = request.GET.get('ingredient', False)
+		#if ingredient_id:
+		#	queryset = queryset.exclude(pk=ingredient_id)
+		self.fields['ingredient'].queryset = queryset
 
 	def save(self, request):
 		request.session['search_recipe'] = request.session.get('search_recipe', {

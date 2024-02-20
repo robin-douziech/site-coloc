@@ -25,7 +25,7 @@
 						</div>
 					{% endfor %}
 				</div>
-				<form action="" method="get">
+				<form action="" method="post">
 					{% csrf_token %}
 					{{ ingredient_form.as_p }}
 				</form>
@@ -57,7 +57,7 @@
 						</div>
 					{% endfor %}
 				</div>
-				<form action="" method="get">
+				<form action="" method="post">
 					{% csrf_token %}
 					{{ tag_form.as_p }}					
 				</form>

@@ -61,15 +61,30 @@ def list(request):
 		'ingredient': None
 	}
 
-	forms_dic = {
+	get_forms = {
 		'search_form': forms.SearchRecipeForm(request, request.GET, initial=initial_data),
-		'ingredient_form': forms.SelectIngredientForm(request, request.GET),
-		'tag_form': forms.SelectTagForm(request, request.GET)
 	}
 
-	for form in forms_dic:
-		if forms_dic[form].is_valid():
-			forms_dic[form].save(request)
+	post_forms = {
+		'ingredient_form': forms.SelectIngredientForm(request),
+		'tag_form': forms.SelectTagForm(request)
+	}
+
+	if request.method == "POST":
+		post_forms = {
+			'ingredient_form': forms.SelectIngredientForm(request, request.POST),
+			'tag_form': forms.SelectTagForm(request, request.POST)
+		}
+		for form in post_forms :
+			if post_forms[form].is_valid():
+				post_forms[form].save(request)
+
+		return redirect(reverse('recipe:list'))
+
+	elif request.method == "GET":
+		for form in get_forms:
+			if get_forms[form].is_valid():
+				get_forms[form].save(request)
 
 	### Recherche des recettes correspondant aux critères de recherche
 
@@ -114,7 +129,8 @@ def list(request):
 	helpers.register_view(request, current_page)
 	return render(request, "recipe/list.html", {
 		'results': results,
-		**forms_dic,
+		**get_forms,
+		**post_forms,
 		'ingredients': ingredients,
 		'tags': tags
 	})
