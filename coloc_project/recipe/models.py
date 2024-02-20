@@ -183,7 +183,7 @@ class RecipeIngredientRelationship(models.Model):
 	quantity = models.CharField(
 		verbose_name = "Quantité",
 		max_length = 20,
-		validators = [RegexValidator(r"^((x ){0,1}([1-9][0-9]*|0)((\.|,)[0-9]*){0,1}( g| kg| L| cL| dL| càs| càc){0,1})$")],
+		validators = [RegexValidator(r"^((x ){0,1}([1-9][0-9]*|0)((\.|,)[0-9]*){0,1}( g| kg| L| cL| dL| càs| càc| tranches?){0,1})$")],
 		default = "0 g"
 	)
 
