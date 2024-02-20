@@ -29,7 +29,9 @@
 {% for relationship in recipe.ingredient_relationships.all %}
 	<div class="ingredient">
 		<div class="ingredient__fig">
-			<img src="{{relationship.ingredient.image.url}}">
+			<div class="ingredient__imgwrapper">
+				<img src="{{relationship.ingredient.image.url}}">
+			</div>
 		</div>
 		<div class="ingredient__text">
 			<p>{{ relationship.ingredient.name }}</p>
@@ -47,7 +49,9 @@
 {% for utensil in recipe.utensils.all %}
 	<div class="utensil">
 		<div class="utensil__fig">
-			<img src="{{utensil.image.url}}">
+			<div class="utensil__imgwrapper">
+				<img src="{{utensil.image.url}}">
+			</div>
 		</div>
 		<div class="utensil__text">
 			<p>{{ utensil.name }}</p>
