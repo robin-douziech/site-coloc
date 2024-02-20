@@ -23,7 +23,7 @@ def change_password(request):
 	if request.method == "POST":
 		form = forms.ChangePasswordForm(request.user, request.POST)
 		if form.is_valid():
-			request.user.set_password(form.cleaned_data['password1'])
+			request.user.set_password(form.cleaned_data['new_password'])
 			request.user.save()
 			return redirect('/coloc/back?nb=1')
 	return render(request, "user/change-password.html", {'form': form})

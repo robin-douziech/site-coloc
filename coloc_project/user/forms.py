@@ -49,13 +49,13 @@ class ChangePasswordForm(forms.Form):
 		widget = forms.PasswordInput(attrs={'placeholder': "Mot de passe actuel"})
 	)
 
-	new_password1 = forms.CharField(
+	new_password = forms.CharField(
 		label = "Nouveau mot de passe",
 		max_length = 50,
 		widget = forms.PasswordInput(attrs={'placeholder': "Nouveau mot de passe"})
 	)
 
-	new_password2 = forms.CharField(
+	confirm_password = forms.CharField(
 		label = "Confirmez le mot de passe",
 		max_length = 50,
 		widget = forms.PasswordInput(attrs={'placeholder': "Confirmez le mot de passe"})
@@ -63,15 +63,15 @@ class ChangePasswordForm(forms.Form):
 
 	def clean(self):
 		old_password = self.cleaned_data['old_password']
-		new_password1 = self.cleaned_data['new_password1']
-		new_password2 = self.cleaned_data['new_password2']
+		new_password = self.cleaned_data['new_password']
+		confirm_password = self.cleaned_data['confirm_password']
 
 		if authenticate(username=self.request_user.username, password=old_password) is None :
 			raise ValidationError(
 				_("Incorrect old password")
 			)
 
-		if new_password1 != new_password2 :
+		if confirm_password != new_password :
 			raise ValidationError(
 				_("Passwords does not match")
 			)
