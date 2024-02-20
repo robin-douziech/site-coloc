@@ -236,7 +236,7 @@ class AddIngredientRecipeRelationshipForm(forms.ModelForm):
 	
 	def __init__(self, recipe, *args, **kwargs):
 		super(AddIngredientRecipeRelationshipForm, self).__init__(*args, **kwargs)
-		self.fields['ingredient'].queryset = models.Ingredient.objects.exclude(pk__in=recipe.ingredients.all())
+		self.fields['ingredient'].queryset = models.Ingredient.objects.exclude(pk__in=recipe.ingredients.all()).order_by("name")
 		self.fields['quantity'].initial = ""
 		self.recipe = recipe
 
@@ -272,7 +272,7 @@ class AddUtensilRecipeRelationshipForm(forms.Form):
 
 	def __init__(self, recipe, *args, **kwargs):
 		super(AddUtensilRecipeRelationshipForm, self).__init__(*args, **kwargs)
-		self.fields['utensil'].queryset = models.Utensil.objects.exclude(pk__in=recipe.utensils.all())
+		self.fields['utensil'].queryset = models.Utensil.objects.exclude(pk__in=recipe.utensils.all()).order_by("name")
 		self.recipe = recipe
 
 	def save(self):
