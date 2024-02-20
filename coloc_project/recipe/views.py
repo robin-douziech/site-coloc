@@ -73,7 +73,7 @@ def list(request):
 
 	### Recherche des recettes correspondant aux critères de recherche
 
-	results = models.Recipe.objects.filter(title__icontains=request.session['search_recipe']['search'])
+	results = models.Recipe.objects.filter(title__icontains=request.session['search_recipe']['search']).order_by("title")
 
 	# gestion des ingrédients et des tags :
 	# si des ingrédients et/ou des tags sont renseignés, on ne garde que les recettes comporant au moins l'un des ingrédients ET au moins l'un des tags
