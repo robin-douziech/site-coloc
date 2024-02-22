@@ -6,13 +6,13 @@ from django.utils.translation import gettext_lazy as _
 import shutil
 
 def recipe_name(instance, filename):
-	return f"recipe/{instance.id}/image.jpg"
+	return f"recipe/recipe/{instance.id}/image.jpg"
 
 def ingredient_name(instance, filename):
-	return f"ingredient/{instance.id}/image.jpg"
+	return f"recipe/ingredient/{instance.id}/image.jpg"
 
 def utensil_name(instance, filename):
-	return f"utensil/{instance.id}/image.jpg"
+	return f"recipe/utensil/{instance.id}/image.jpg"
 
 class Tag(models.Model):
 	
