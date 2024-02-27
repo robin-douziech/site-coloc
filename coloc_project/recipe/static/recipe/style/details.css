@@ -35,7 +35,6 @@
 
 	width: 80%;
 	max-height: 80vh;
-	aspect-ratio: auto;
 	border-radius: 30px;
 	overflow: hidden;
 	box-shadow: 0 0 8px #9b9b9b;
@@ -44,6 +43,7 @@
 .imgwrapper > img {
 	min-width: 100%;
 	min-height: 100%;
+	aspect-ratio: auto;
 }
 
 .text {
