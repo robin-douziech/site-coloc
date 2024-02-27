@@ -258,7 +258,7 @@
 .recipe__fig > img {
 	min-width: 100%;
 	min-height: 100%;
-	aspect-ratio: auto;
+	object-fit: cover;
 }
 
 .recipe__text {
