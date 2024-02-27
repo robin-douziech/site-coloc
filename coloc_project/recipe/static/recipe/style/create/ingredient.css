@@ -64,7 +64,7 @@
 .ingredient__imgwrapper > img {
 	min-width: 100%;
 	min-height: 100%;
-	aspect-ratio: auto;
+	object-fit: cover;
 }
 
 .ingredient__text {
