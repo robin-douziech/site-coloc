@@ -1,0 +1,13 @@
+.foreground {
+	font-size: 20px;
+}
+
+.foreground > p {
+	margin-top: 50px;
+	width: 50%;
+	text-align: center;
+}
+
+form {
+	margin-top: 0;
+}

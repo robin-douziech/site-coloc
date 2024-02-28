@@ -13,7 +13,7 @@
 {% block foreground %}
 	<div class="apps">
 		<a class="app" href="{% url 'recipe:list' %}"><p>Recettes</p></a>
-		<a class="app" href="#"><p>App 2</p><p>(prochainement ...)</p></a>
+		<a class="app" href="{% url 'png_creator:index' %}">PNG</a>
 		<a class="app" href="#"><p>App 3</p><p>(prochainement ...)</p></a>
 	</div>
 {% endblock foreground %}

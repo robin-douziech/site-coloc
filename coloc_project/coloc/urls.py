@@ -25,6 +25,7 @@ urlpatterns = [
     path('coloc/back', views.back, name="back"),
     path('coloc/user/', include('user.urls')),
     path('coloc/recipe/', include('recipe.urls')),
+    path('coloc/png-creator', include('png_creator.urls')),
     path('coloc/admin/', admin.site.urls),
 ]
 

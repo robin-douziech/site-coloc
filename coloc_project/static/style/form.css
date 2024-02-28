@@ -15,16 +15,28 @@ form {
 	padding: 50px;
 }
 
-.field-container {
+.form-container {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-
-	padding: 20px;
-	margin: 10px;
 }
 
-input, textarea {
+.field-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	padding: 10px;
+	margin: 0 0 20px 0;
+}
+
+.field-container > p {
+	margin: 0 10px 0 0;
+	font-size: 30px;
+}
+
+input, textarea, select {
 	font-size: 30px;
 }

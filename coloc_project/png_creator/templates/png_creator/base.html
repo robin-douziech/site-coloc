@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_headers %}
+	<link rel="stylesheet" type="text/css" href="{% static 'png_creator/style/base.css' %}">
+	{% block png_creator_extra_headers %}{% endblock png_creator_extra_headers %}
+{% endblock extra_headers %}
+
+{% block header-title %}
+	<h1>PNG</h1>
+{% endblock header-title %}

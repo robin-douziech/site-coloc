@@ -1,0 +1,16 @@
+{% extends 'png_creator/base.html' %}
+
+{% load static %}
+
+{% block png_creator_extra_headers %}
+	<link rel="stylesheet" type="text/css" href="{% static 'style/form.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'png_creator/style/index.css' %}">
+{% endblock png_creator_extra_headers %}
+
+{% block foreground %}
+	<p>Écris quelque chose sur du papier blanc, prend-le en photo, upload la photo ici et tu obtiendras un beau png de ce que tu as écris ! (principale utilité: signer un document sans avoir à l'imprimer)</p>
+	<form action="" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form.as_p }}
+	</form>
+{% endblock foreground %}
