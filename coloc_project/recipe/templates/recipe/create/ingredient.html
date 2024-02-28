@@ -35,9 +35,6 @@
 							{% if perms.recipe.change_ingredient %}
 								<a class="btn btn--blue" href="{% url 'recipe:update-ingredient' %}?id={{ingredient.id}}">Modifier</a>
 							{% endif %}
-							{% if perms.recipe.del_ingredient %}
-								<a class="btn btn--red" href="{% url 'recipe:delete-ingredient' %}?id={{ingredient.id}}">Supprimer</a>
-							{% endif %}
 						</div>
 					</div>
 				{% endfor %}

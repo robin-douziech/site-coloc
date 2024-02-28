@@ -16,4 +16,7 @@
 		{% csrf_token %}
 		{{ form.as_p }}
 	</form>
+	{% if perms.recipe.del_ingredient %}
+		<a class="btn btn--red" href="{% url 'recipe:delete-ingredient' %}?id={{ingredient.id}}">Supprimer</a>
+	{% endif %}
 {% endblock foreground %}

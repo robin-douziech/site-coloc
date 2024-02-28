@@ -35,9 +35,6 @@
 							{% if perms.recipe.change_utensil %}
 								<a class="btn btn--blue" href="{% url 'recipe:update-utensil' %}?id={{utensil.id}}">Modifier</a>
 							{% endif %}
-							{% if perms.recipe.del_utensil %}
-								<a class="btn btn--red" href="{% url 'recipe:delete-utensil' %}?id={{utensil.id}}">Supprimer</a>
-							{% endif %}
 						</div>
 					</div>
 				{% endfor %}
