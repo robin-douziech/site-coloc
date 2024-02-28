@@ -1,9 +1,11 @@
 from django import forms
+from django.core.files.storage import default_storage
 from django.utils.safestring import mark_safe
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from datetime import timedelta
 import django, os
@@ -131,7 +133,7 @@ class CreateIngredientForm(MyCreateModelForm):
 		unique_fields = ['name']
 		widgets = {
 			'name': forms.TextInput(attrs={'placeholder': "Nom de l'ingrédient"}),
-			'months': forms.TextInput(attrs={'placeholder': 'c kan ke sa pous ? (début-fin)'})
+			'months': forms.TextInput(attrs={'placeholder': 'Saison (ex: 5-9) (facultatif)'})
 		}
 
 class CreateUtensilForm(MyCreateModelForm):
@@ -164,6 +166,63 @@ class CreateTagForm(MyCreateModelForm):
 		widgets = {
 			'text': forms.TextInput(attrs={'placeholder': "Texte du tag"})
 		}
+
+class UpdateModelForm(forms.ModelForm):
+
+	def __init__(self, *args, **kwargs):
+		super(UpdateModelForm, self).__init__(*args, **kwargs)
+		self.instance = kwargs['instance']
+		self.initial_fields = {}
+		for field in [f for f in self.Meta.model._meta.fields if f.name!="id"] :
+			self.initial_fields[field.name] = getattr(self.instance, field.name)
+			self.fields[field.name].initial = getattr(self.instance, field.name)
+			self.fields[field.name].required = True
+
+	def save(self, *args, **kwargs):
+		for field_name, field_value in self.cleaned_data.items():
+			field = self.Meta.model._meta.get_field(field_name)
+			if isinstance(field, django.db.models.FileField):
+				new_file = self.cleaned_data.get(field_name)
+				if new_file and new_file!=self.initial_fields[field_name] :
+					print("difhbvidfbvkefjbvefjbvfijbv")
+					if getattr(self.instance, field_name):
+						os.remove(f"{settings.MEDIA_ROOT}{self.initial_fields[field_name]}")
+					file_name = default_storage.save(field.upload_to(self.instance, ""), new_file)
+					setattr(self.instance, field_name, file_name)
+			else:
+				setattr(self.instance, field_name, field_value)
+		self.instance.save()
+		return self.instance
+
+	def as_p(self):
+		html_string = "<div class=\"form-container\">\n"
+		for field in self:
+			print(f"field: {field.name}")
+			html_string += "\t<div class=\"field-container\">\n"
+			if isinstance(self.Meta.model._meta.get_field(field.name), django.db.models.ImageField):
+				html_string += f"\t\t<p>{field.label} : </p><input id=\"id_{field.name}\" type=\"file\" name=\"{field.name}\" accept=\"image/*\">\n"
+			else:
+				html_string += f"\t\t<p>{field.label} : </p>{field}\n"
+			html_string += "\t</div>\n"
+		html_string += "<input type=\"submit\" value=\"valider\">\n"
+		html_string += "</div>\n"
+		return mark_safe(html_string)
+
+class UpdateIngredientForm(UpdateModelForm):
+
+	def __init__(self, *args, **kwargs):
+		super(UpdateIngredientForm, self).__init__(*args, **kwargs)
+		self.fields['months'].required = False
+
+	class Meta:
+		model = models.Ingredient
+		fields = '__all__'
+
+class UpdateUtensilForm(UpdateModelForm):
+
+	class Meta:
+		model = models.Utensil
+		fields = '__all__'
 
 class ChangePrepDurationForm(MyEditModelForm):
 

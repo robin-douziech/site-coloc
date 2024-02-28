@@ -34,7 +34,7 @@ class Ingredient(models.Model):
 	)
 
 	months = models.CharField(
-		verbose_name = "Mois",
+		verbose_name = "Saison",
 		max_length = 26,
 		null = True,
 		blank = True,

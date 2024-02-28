@@ -12,6 +12,9 @@ urlpatterns = [
     path('create-utensil', views.create_utensil, name="create-utensil"),
     path('create-tag', views.create_tag, name="create-tag"),
 
+    path('update-ingredient', views.update_ingredient, name="update-ingredient"),
+    path('update-utensil', views.update_utensil, name="update-utensil"),
+
     path('delete-ingredient-recipe-relationship', views.delete_ingredient_recipe_relationship, name="delete-ingredient-recipe-relationship"),
     path('delete-utensil-recipe-relationship', views.delete_utensil_recipe_relationship, name="delete-utensil-recipe-relationship"),
     path('delete-step', views.delete_step, name="delete-step"),

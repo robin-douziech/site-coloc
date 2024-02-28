@@ -197,6 +197,38 @@ def edit(request):
 	else:
 		return redirect(reverse('recipe:list'))
 
+@login_required
+@permission_required('recipe.change_ingredient')
+def update_ingredient(request):
+	ingredient_id = request.GET.get('id', False)
+	if ingredient_id:
+		ingredient = get_object_or_404(models.Ingredient, pk=ingredient_id)
+		form = forms.UpdateIngredientForm(instance=ingredient)
+		if request.method == "POST":
+			form = forms.UpdateIngredientForm(request.POST, request.FILES, instance=ingredient)
+			if form.is_valid():
+				form.save()
+				return redirect(reverse('recipe:create-ingredient'))
+		return render(request, "recipe/update/ingredient.html", {'ingredient': ingredient, 'form': form})
+	else:
+		return redirect(reverse('recipe:create-ingredient'))
+
+@login_required
+@permission_required('recipe.change_utensil')
+def update_utensil(request):
+	utensil_id = request.GET.get('id', False)
+	if utensil_id:
+		utensil = get_object_or_404(models.Utensil, pk=utensil_id)
+		form = forms.UpdateUtensilForm(instance=utensil)
+		if request.method == "POST":
+			form = forms.UpdateUtensilForm(request.POST, request.FILES, instance=utensil)
+			if form.is_valid():
+				form.save()
+				return redirect(reverse('recipe:create-utensil'))
+		return render(request, "recipe/update/utensil.html", {'utensil': utensil, 'form': form})
+	else:
+		return redirect(reverse('recipe:create-utensil'))
+
 
 @login_required
 @permission_required('recipe.delete_recipeingredientrelationship')
@@ -255,7 +287,7 @@ def delete_ingredient(request):
 	if ingredient_id:
 		ingredient = get_object_or_404(models.Ingredient, pk=ingredient_id)
 		ingredient.delete()
-		return redirect("/coloc/back?nb=1")
+		return redirect(reverse('recipe:create-ingredient'))
 	else:
 		return redirect(reverse('recipe:list'))
 
@@ -266,7 +298,7 @@ def delete_utensil(request):
 	if utensil_id:
 		utensil = get_object_or_404(models.Utensil, pk=utensil_id)
 		utensil.delete()
-		return redirect("/coloc/back?nb=1")		
+		return redirect(reverse('recipe:create-utensil'))
 	else:
 		return redirect(reverse('recipe:list'))
 
